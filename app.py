@@ -12,11 +12,31 @@ def generate_response(user_query):
     """Handles user queries using the Groq model."""
     
     prompt = [
-        {"role": "system", "content": """you are a text-to-JSON converter. Analyze the given text and 
-        convert it into JSON format. Do not provide any output other than JSON. The JSON should contain 
-        three parameters: {"product_name":"apple","quantity":500,"unit_name":"g"}.
-        Identify unit names correctly, store values as they are, and convert tanglish words into numbers 
-        (e.g., "arai" → 0.5, "kaal" → 0.25). Use short forms for units (e.g., "kg" for kilogram)."""},
+        {"role": "system", "content": """You are a text-to-JSON converter specialized in analyzing multilingual inputs 
+        (Tamil, English, Tanglish) and converting them into structured JSON format.
+
+        ### Rules to Follow:
+        1. **Output Only JSON** with format: {"product_name": "apple", "quantity": 500, "unit_name": "g"}
+        2. Recognize **Tamil slang and number words** (arai → 0.5, kaal → 0.25, etc.)
+        3. Extract **product name, quantity, and unit name**
+        4. Convert **unit names to standard short forms** ("kg", "g", "mg"). Default to "g" if missing.
+        5. Handle **multi-line input** and return a JSON list for multiple items.
+
+        ### Example Input:
+        ```
+        thakkali 5 kg
+        beetroot 3kg
+        arakilo kothumai
+        ```
+
+        ### Expected Output:
+        ```json
+        [
+          {"product_name": "thakkali", "quantity": 5, "unit_name": "kg"},
+          {"product_name": "beetroot", "quantity": 3, "unit_name": "kg"},
+          {"product_name": "kothumai", "quantity": 0.5, "unit_name": "kg"}
+        ]
+        ```"""},
         {"role": "user", "content": f"User Query: {user_query}"}
     ]
 
