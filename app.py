@@ -6,7 +6,7 @@ import groq
 app = Flask(__name__)
 CORS(app)
 
-client = groq.Client(api_key="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")
+client = groq.Client(api_key="")
 
 def generate_response(user_query):
     """Handles user queries using the Groq model."""
